@@ -12,21 +12,21 @@
         @endphp
 
         @if($book->available_copies > 0 && $canBorrow)
-        <form action="{{ route('books.borrow', $book) }}" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-success">
-                Borrow
-            </button>
-        </form>
+        <button type="button" 
+                class="btn btn-sm btn-success borrow-book-btn" 
+                data-book-id="{{ $book->id }}"
+                data-book-title="{{ $book->title }}">
+            Borrow
+        </button>
         @endif
 
         @if($currentBorrow)
-        <form action="{{ route('books.return', $book) }}" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-warning">
-                Return
-            </button>
-        </form>
+        <button type="button" 
+                class="btn btn-sm btn-warning return-book-btn" 
+                data-book-id="{{ $book->id }}"
+                data-book-title="{{ $book->title }}">
+            Return
+        </button>
         @endif
     @endrole
 

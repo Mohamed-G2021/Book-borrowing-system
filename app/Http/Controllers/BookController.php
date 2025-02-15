@@ -99,22 +99,33 @@ class BookController extends Controller implements HasMiddleware
             ->with('success', 'Book deleted successfully');
     }
 
-    public function borrow(Book $book)
+    public function borrow(Request $request, Book $book)
     {
         // Check if user has already borrowed this book
         if (Auth::user()->hasBorrowedBook($book)) {
-            return redirect()->back()->with('error', 'You have already borrowed this book.');
+            return $request->ajax() 
+                ? response()->json(['error' => 'You have already borrowed this book.'], 400)
+                : redirect()->back()->with('error', 'You have already borrowed this book.');
         }
 
         try {
             $this->bookService->borrowBook($book);
-            return redirect()->route('books.index')->with('success', 'Book borrowed successfully');
+            
+            return $request->ajax() 
+                ? response()->json([
+                    'success' => 'Book borrowed successfully', 
+                    'book_id' => $book->id, 
+                    'available_copies' => $book->fresh()->available_copies
+                ])
+                : redirect()->route('books.index')->with('success', 'Book borrowed successfully');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return $request->ajax() 
+                ? response()->json(['error' => $e->getMessage()], 400)
+                : redirect()->back()->with('error', $e->getMessage());
         }
     }
 
-    public function return(Book $book)
+    public function return(Request $request, Book $book)
     {
         try {
             // Find the active borrow for this book by the current user
@@ -125,14 +136,24 @@ class BookController extends Controller implements HasMiddleware
                 ->first();
     
             if (!$borrowHistory) {
-                return redirect()->back()->with('error', 'You have not borrowed this book.');
+                return $request->ajax() 
+                    ? response()->json(['error' => 'You have not borrowed this book.'], 400)
+                    : redirect()->back()->with('error', 'You have not borrowed this book.');
             }
     
             $this->bookService->returnBook($book, $borrowHistory);
             
-            return redirect()->route('books.index')->with('success', 'Book returned successfully');
+            return $request->ajax() 
+                ? response()->json([
+                    'success' => 'Book returned successfully', 
+                    'book_id' => $book->id, 
+                    'available_copies' => $book->fresh()->available_copies
+                ])
+                : redirect()->route('books.index')->with('success', 'Book returned successfully');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+            return $request->ajax() 
+                ? response()->json(['error' => $e->getMessage()], 400)
+                : redirect()->back()->with('error', $e->getMessage());
         }
     }
 
@@ -147,4 +168,3 @@ class BookController extends Controller implements HasMiddleware
 
     }
 }
-

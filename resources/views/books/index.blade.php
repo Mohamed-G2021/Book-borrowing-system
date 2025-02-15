@@ -60,6 +60,69 @@ $(function() {
         ]
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const booksTable = document.getElementById('books-table');
+    
+    booksTable.addEventListener('click', function(event) {
+        const borrowButton = event.target.closest('.borrow-book-btn');
+        const returnButton = event.target.closest('.return-book-btn');
+        
+        if (borrowButton) {
+            handleBookAction(borrowButton, 'borrow');
+        }
+        
+        if (returnButton) {
+            handleBookAction(returnButton, 'return');
+        }
+    });
+
+    function handleBookAction(button, action) {
+        const bookId = button.dataset.bookId;
+        const bookTitle = button.dataset.bookTitle;
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        fetch(`/books/${bookId}/${action}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'An error occurred');
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Refresh the DataTable
+            if ($.fn.DataTable.isDataTable('#books-table')) {
+                $('#books-table').DataTable().ajax.reload(null, false);
+            }
+            
+            // Show success message (you can replace with a more sophisticated notification)
+            const notification = document.createElement('div');
+            notification.classList.add('alert', 'alert-success', 'mb-3', 'text-center');
+            notification.role = 'alert';
+            notification.textContent = `Successfully ${action}ed "${bookTitle}"`;
+            document.querySelector('.container').insertBefore(notification, document.querySelector('.container > .card'));
+            setTimeout(() => notification.remove(), 2000);
+        })
+        .catch(error => {
+            // Dispatch a custom event for the alert
+            window.dispatchEvent(new CustomEvent('show-alert', {
+                detail: {
+                    type: 'danger',
+                    message: error.message
+                }
+            }));
+        });
+    }
+});
 </script>
 @endpush
 @endsection

@@ -24,7 +24,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const alerts = document.querySelectorAll('[data-timeout]');
     alerts.forEach(alert => {
-        const timeout = alert.dataset.timeout || 1000;
+        const timeout = alert.dataset.timeout || 2000;
         setTimeout(() => {
             const bsAlert = new bootstrap.Alert(alert);
             bsAlert.close();
