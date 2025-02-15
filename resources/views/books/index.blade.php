@@ -15,6 +15,12 @@
                 </div>
                 @endrole
 
+                <div class="mb-3">
+                    <a href="{{ route('books.export-pdf') }}" class="btn btn-danger ml-2" target="_blank">
+                        <i class="fas fa-file-pdf"></i> Export PDF
+                    </a>
+                </div>
+
                 <div class="card">
                     <div class="card-body">
                         <x-alert />

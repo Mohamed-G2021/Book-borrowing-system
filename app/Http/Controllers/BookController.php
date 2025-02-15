@@ -7,10 +7,12 @@ use App\Http\Requests\UpdateBookRequest;
 use App\Models\Book;
 use App\Models\BorrowHistory;
 use App\Services\BookService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\View;
 use Yajra\DataTables\Facades\DataTables;
 
 class BookController extends Controller implements HasMiddleware
@@ -155,6 +157,18 @@ class BookController extends Controller implements HasMiddleware
                 ? response()->json(['error' => $e->getMessage()], 400)
                 : redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function exportPdf()
+    {
+        // Fetch all books
+        $books = Book::all();
+
+        // Generate PDF
+        $pdf = PDF::loadView('books.pdf-export', compact('books'));
+        
+        // Download the PDF
+        return $pdf->download('book_catalog_' . now()->format('Y-m-d') . '.pdf');
     }
 
     protected function canUserBorrowBook(Book $book)
