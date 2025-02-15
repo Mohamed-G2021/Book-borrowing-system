@@ -35,9 +35,10 @@ php artisan key:generate
 
 5. Setup Database
 - Create a MySQL database
-- Update `.env` with your database credentials
+- Update `.env` with your database credentials (if needed)
 ```bash
-php artisan migrate:fresh --seed
+php artisan migrate
+php artisan db:seed
 ```
 
 6. Start Development Server
