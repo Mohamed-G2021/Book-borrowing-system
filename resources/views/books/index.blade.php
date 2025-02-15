@@ -2,38 +2,40 @@
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h1 class="mb-4">Book Catalog</h1>
+    <x-card>
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="mb-4">Book Catalog</h1>
 
-            @role('admin')
-            <div class="mb-3">
-                <a href="{{ route('books.create') }}" class="btn btn-primary">
-                    <i class="fas fa-plus"></i> Add New Book
-                </a>
-            </div>
-            @endrole
+                @role('admin')
+                <div class="mb-3">
+                    <a href="{{ route('books.create') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add New Book
+                    </a>
+                </div>
+                @endrole
 
-            <div class="card">
-                <div class="card-body">
-                    <x-alert />
-                    
-                    <table class="table table-striped" id="books-table">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>ISBN</th>
-                                <th>Total Copies</th>
-                                <th>Available Copies</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                    </table>
+                <div class="card">
+                    <div class="card-body">
+                        <x-alert />
+                        
+                        <table class="table table-striped" id="books-table">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>ISBN</th>
+                                    <th>Total Copies</th>
+                                    <th>Available Copies</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </x-card>
 </div>
 
 @push('scripts')
