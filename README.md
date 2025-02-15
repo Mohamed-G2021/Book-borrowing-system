@@ -13,7 +13,7 @@
 ```bash
 git clone git@github.com:Mohamed-G2021/Book-borrowing-system.git
 
-cd book-borrowing-system
+cd Book-borrowing-system
 ```
 
 2. Install PHP Dependencies
