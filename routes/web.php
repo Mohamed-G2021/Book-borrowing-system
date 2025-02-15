@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,3 +19,19 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::resource('books', BookController::class, [
+        'except' => ['show'],
+    ]);
+
+    Route::post('/books/{book}/borrow', [BookController::class, 'borrow'])
+        ->name('books.borrow');
+    
+   Route::post('/books/{book}/return', [BookController::class, 'return'])
+    ->name('books.return');
+
+    Route::get('/books/export-pdf', [BookController::class, 'exportPdf'])
+    ->name('books.export-pdf');
+});
