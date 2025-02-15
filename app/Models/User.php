@@ -52,4 +52,13 @@ class User extends Authenticatable
     {
         return $this->morphMany(BorrowHistory::class, 'borrower');
     }
+
+    public function hasBorrowedBook(Book $book)
+    {
+        return $this->borrowHistories()
+            ->where('borrowable_id', $book->id)
+            ->where('borrowable_type', Book::class)
+            ->where('status', '!=', 'returned')
+            ->exists();
+    }
 }
