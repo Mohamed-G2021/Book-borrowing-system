@@ -25,18 +25,20 @@
                     <div class="card-body">
                         <x-alert />
                         
-                        <table class="table table-striped" id="books-table">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Author</th>
-                                    <th>ISBN</th>
-                                    <th>Total Copies</th>
-                                    <th>Available Copies</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="books-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>ISBN</th>
+                                        <th>Total Copies</th>
+                                        <th>Available Copies</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
