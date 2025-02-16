@@ -9,35 +9,16 @@ use App\Models\BorrowHistory;
 use App\Services\BookService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\View;
 use Yajra\DataTables\Facades\DataTables;
 
-class BookController extends Controller implements HasMiddleware
+class BookController extends Controller
 {
     protected $bookService;
 
     public function __construct(BookService $bookService)
     {
         $this->bookService = $bookService;
-    }
-
-    /**
-     * Get the middleware that should be assigned to the controller.
-    */
-    public static function middleware(): array
-    {
-        return [
-            'auth', // Ensures user is authenticated
-
-            // Admin can access everything EXCEPT borrow and returnBook
-            new Middleware('role', ['admin'], except: ['borrow', 'returnBook']),
-
-            // User can access everything EXCEPT create, store, edit, update, destroy
-            new Middleware('role', ['user'], except: ['create', 'store', 'edit', 'update', 'destroy']),
-        ];
     }
 
     public function index(Request $request)
