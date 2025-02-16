@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin-specific routes
     Route::middleware(['role:admin'])->group(function () {
         Route::resource('books', BookController::class, [
-            'except' => ['show', 'borrow', 'return'],
+            'except' => ['show'],
         ]);
     });
 
